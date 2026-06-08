@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makam Multispeciality Clinic – Book Your Appointment</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #16161f;
+  --red: #e8294a;
+  --red-dark: #b01e37;
+  --red-glow: rgba(232,41,74,0.15);
+  --white: #f5f4f0;
+  --muted: #6b6a72;
+  --border: rgba(255,255,255,0.07);
+  --border-hot: rgba(232,41,74,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10,10,15,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: white;
+}
+.nav-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+.nav-logo-sub {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 1px;
+}
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--red);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px 40px 80px;
+  overflow: hidden;
+}
+
+.hero-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+.hero-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,41,74,0.12) 0%, transparent 70%);
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-glow-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,41,74,0.06) 0%, transparent 70%);
+  top: 20%;
+  left: 10%;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(232,41,74,0.1);
+  border: 1px solid var(--border-hot);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 32px;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(44px, 7vw, 86px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+.hero h1 .accent {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red);
+  letter-spacing: -1px;
+}
+
+.hero-desc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-primary {
+  padding: 16px 36px;
+  background: var(--red);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 8px 40px rgba(232,41,74,0.35);
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-primary:hover {
+  background: var(--red-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(232,41,74,0.45);
+}
+
+.btn-secondary {
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+.btn-secondary svg { width: 18px; height: 18px; fill: #25d366; }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 80px 40px 0;
+}
+.stat-item {
+  background: var(--surface);
+  padding: 28px 24px;
+  text-align: center;
+  transition: background 0.2s;
+}
+.stat-item:hover { background: var(--surface2); }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-num span { color: var(--red); }
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* ── SPECIALITIES ── */
+.section {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-tag {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 16px;
+  display: block;
+}
+.section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 48px;
+}
+.section h2 em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red);
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.spec-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.spec-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.spec-card:hover::after,
+.spec-card.active::after { transform: scaleX(1); }
+.spec-card:hover {
+  border-color: var(--border-hot);
+  background: var(--surface2);
+  transform: translateY(-3px);
+}
+.spec-card.active {
+  border-color: var(--border-hot);
+  background: linear-gradient(135deg, rgba(232,41,74,0.08), var(--surface2));
+}
+
+.spec-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(232,41,74,0.1);
+  border: 1px solid var(--border-hot);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.spec-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--white);
+}
+.spec-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.spec-check {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.spec-card.active .spec-check { opacity: 1; transform: scale(1); }
+
+/* ── BOOKING FORM ── */
+.booking-wrap {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 100px 40px;
+}
+.booking-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.form-header {
+  margin-bottom: 48px;
+}
+.step-indicator {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.step-dot {
+  height: 3px;
+  border-radius: 10px;
+  flex: 1;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.step-dot.done { background: var(--red); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 580px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  nav { padding: 16px 20px; }
+  .hero { padding: 120px 20px 60px; }
+  .section { padding: 60px 20px; }
+  .booking-wrap { padding: 60px 20px; }
+  .stats-bar { margin: 60px 20px 0; }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.field input,
+.field select,
+.field textarea {
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.field input::placeholder { color: var(--muted); }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(232,41,74,0.1);
+}
+.field textarea { resize: none; height: 100px; }
+.field select option { background: #111; }
+
+.select-wrap {
+  position: relative;
+}
+.select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  font-size: 12px;
+}
+.select-wrap select { width: 100%; cursor: pointer; }
+
+.field-full { grid-column: 1 / -1; }
+
+.submit-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 8px;
+}
+.submit-main {
+  flex: 1;
+  padding: 18px;
+  background: var(--red);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 8px 32px rgba(232,41,74,0.3);
+}
+.submit-main:hover {
+  background: var(--red-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(232,41,74,0.45);
+}
+.wa-inline {
+  padding: 18px 20px;
+  background: rgba(37,211,102,0.1);
+  border: 1px solid rgba(37,211,102,0.25);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wa-inline:hover { background: rgba(37,211,102,0.2); }
+.wa-inline svg { width: 22px; height: 22px; fill: #25d366; }
+
+/* ── DOCTOR CARD ── */
+.doctor-strip {
+  padding: 0 40px 100px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.doctor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .doctor-card { flex-direction: column; text-align: center; }
+  .doctor-strip { padding: 0 20px 60px; }
+}
+.doctor-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+.doctor-info h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.doctor-info .role {
+  font-size: 13px;
+  color: var(--red);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.doctor-info p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── SUCCESS ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.overlay.show { display: flex; }
+.success-box {
+  background: var(--surface);
+  border: 1px solid var(--border-hot);
+  border-radius: 24px;
+  padding: 56px 48px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes pop { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+.success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(232,41,74,0.1);
+  border: 1px solid var(--border-hot);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 32px;
+}
+.success-box h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.success-box p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.success-close {
+  margin-top: 28px;
+  padding: 12px 32px;
+  border: 1px solid var(--border-hot);
+  background: transparent;
+  color: var(--red);
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.success-close:hover { background: var(--red); color: white; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 40px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+footer p { font-size: 12px; color: var(--muted); }
+footer a { color: var(--muted); text-decoration: none; font-size: 12px; }
+footer a:hover { color: var(--white); }
+
+/* ── FADE IN ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">M</div>
+    <div>
+      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">MAKAM</span>
+      <span class="nav-logo-sub">Multispeciality Clinic · HSR Layout</span>
+    </div>
+  </div>
+  <a class="nav-cta" href="#booking" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'});return false;">Book Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Now Accepting Appointments</div>
+    <h1>
+      Expert Care,<br>
+      <span class="accent">Every Specialty.</span>
+    </h1>
+    <p class="hero-desc">
+      From Orthopedics to Dermatology — Makam Multispeciality Clinic brings together top specialists under one roof in HSR Layout, Bengaluru.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">
+        Book Appointment →
+      </button>
+      <a class="btn-secondary" href="https://wa.me/919364013300" target="_blank">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat-item">
+    <div class="stat-num">8<span>+</span></div>
+    <div class="stat-label">Specialities</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">1K<span>+</span></div>
+    <div class="stat-label">Patients Treated</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">★<span>4.8</span></div>
+    <div class="stat-label">Google Rating</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">24<span>h</span></div>
+    <div class="stat-label">Appointment Booking</div>
+  </div>
+</div>
+
+<!-- SPECIALITIES -->
+<section class="section">
+  <div class="reveal">
+    <span class="section-tag">Our Departments</span>
+    <h2>Choose Your <em>Speciality</em></h2>
+  </div>
+  <div class="spec-grid" id="spec-grid">
+    <div class="spec-card reveal" data-spec="Orthopedics" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">🦴</div>
+      <h3>Orthopedics</h3>
+      <p>Joint pain, fractures, bone & muscle disorders managed by expert orthopedic surgeons.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Spine & Back Care" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">🔗</div>
+      <h3>Spine & Back Care</h3>
+      <p>Comprehensive spine treatment — slip disc, sciatica, back pain, and posture correction.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Joint Replacement" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">⚙️</div>
+      <h3>Joint Replacement</h3>
+      <p>Advanced knee and hip replacement surgeries with minimally invasive techniques.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Sports Injury" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">🏃</div>
+      <h3>Sports Injury</h3>
+      <p>Ligament tears, muscle injuries, physiotherapy and sports rehabilitation programs.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Dermatology & Acne" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">✨</div>
+      <h3>Dermatology & Acne</h3>
+      <p>Skin conditions, acne, eczema, and medically supervised skin care treatments.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Hair Loss Treatment" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">💆</div>
+      <h3>Hair Loss Treatment</h3>
+      <p>PRP therapy, hair growth treatments, scalp analysis, and trichology consultations.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="Skin Rejuvenation" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">🌟</div>
+      <h3>Skin Rejuvenation</h3>
+      <p>Laser treatments, chemical peels, anti-ageing facials, and aesthetic procedures.</p>
+    </div>
+    <div class="spec-card reveal" data-spec="General Consultation" onclick="selectSpec(this)">
+      <div class="spec-check">✓</div>
+      <div class="spec-dot">🏥</div>
+      <h3>General Consultation</h3>
+      <p>Not sure which dept? Book a general consultation and we'll guide you to the right specialist.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTOR -->
+<div class="doctor-strip reveal">
+  <div class="doctor-card">
+    <div class="doctor-avatar">A</div>
+    <div class="doctor-info">
+      <h3>Dr. Aneesh & Team</h3>
+      <div class="role">Lead Specialist · Makam Multispeciality Clinic</div>
+      <p>Our team of specialists brings together expertise across orthopedics, dermatology, and aesthetic medicine — committed to providing evidence-based, patient-first care in Bengaluru.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING FORM -->
+<div class="booking-wrap" id="booking">
+  <div class="booking-inner">
+    <div class="form-header reveal">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+      </div>
+      <span class="section-tag">Appointment</span>
+      <h2 style="margin-bottom:8px;">Book Your <em>Slot</em></h2>
+      <p style="font-size:13px;color:var(--muted);">We confirm within 1 hour · 28/27, 24th Main Rd, HSR Layout, Bengaluru</p>
+    </div>
+
+    <div class="form-grid reveal">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="fname" placeholder="Your full name" />
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" id="fphone" placeholder="+91 XXXXX XXXXX" />
+      </div>
+      <div class="field">
+        <label>Department / Speciality</label>
+        <div class="select-wrap">
+          <select id="fdept">
+            <option value="">Select speciality</option>
+            <option>Orthopedics</option>
+            <option>Spine & Back Care</option>
+            <option>Joint Replacement</option>
+            <option>Sports Injury</option>
+            <option>Dermatology & Acne</option>
+            <option>Hair Loss Treatment</option>
+            <option>Skin Rejuvenation</option>
+            <option>General Consultation</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Preferred Date</label>
+        <input type="date" id="fdate" />
+      </div>
+      <div class="field">
+        <label>Preferred Time</label>
+        <div class="select-wrap">
+          <select id="ftime">
+            <option value="">Select time slot</option>
+            <option>Morning (9 AM – 12 PM)</option>
+            <option>Afternoon (12 PM – 3 PM)</option>
+            <option>Evening (3 PM – 7 PM)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Patient Type</label>
+        <div class="select-wrap">
+          <select id="ftype">
+            <option value="">Select</option>
+            <option>New Patient</option>
+            <option>Follow-up / Existing</option>
+          </select>
+        </div>
+      </div>
+      <div class="field field-full">
+        <label>Describe Your Concern (Optional)</label>
+        <textarea id="fconcern" placeholder="Brief description of your symptoms or what you'd like to address…"></textarea>
+      </div>
+    </div>
+
+    <div class="submit-row reveal">
+      <button class="submit-main" onclick="submitForm()">Confirm Appointment →</button>
+      <a class="wa-inline" href="https://wa.me/919364013300" target="_blank" title="WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h3>Appointment Requested!</h3>
+    <p>Our team at Makam Clinic will call you within <strong style="color:var(--white)">1 hour</strong> to confirm your slot.<br><br>📍 28/27, 24th Main Rd, HSR Layout, Bengaluru</p>
+    <button class="success-close" onclick="document.getElementById('overlay').classList.remove('show')">Close</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Makam Multispeciality Clinic · HSR Layout, Bengaluru 560102</p>
+  <div style="display:flex;gap:24px;">
+    <a href="https://wa.me/919364013300">WhatsApp</a>
+    <a href="https://www.instagram.com/makam_multispeciality_clinic" target="_blank">Instagram</a>
+    <a href="https://maps.app.goo.gl/4sgJHM7F2rv9Pdtp9" target="_blank">Get Directions</a>
+  </div>
+</footer>
+
+<script>
+  // Intersection observer for reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Set min date
+  document.getElementById('fdate').min = new Date().toISOString().split('T')[0];
+
+  // Spec card selection — syncs to form dropdown
+  function selectSpec(card) {
+    card.classList.toggle('active');
+    const spec = card.dataset.spec;
+    const sel = document.getElementById('fdept');
+    if (card.classList.contains('active')) {
+      // deselect others
+      document.querySelectorAll('.spec-card').forEach(c => { if (c !== card) c.classList.remove('active'); });
+      sel.value = spec;
+    }
+  }
+
+  // Submit
+  function submitForm() {
+    const name = document.getElementById('fname').value.trim();
+    const phone = document.getElementById('fphone').value.trim();
+    const dept = document.getElementById('fdept').value;
+    const date = document.getElementById('fdate').value;
+
+    if (!name || !phone || !dept || !date) {
+      alert('Please fill in your name, phone number, department, and preferred date.');
+      return;
+    }
+
+    const msg = encodeURIComponent(
+      `Hi Makam Clinic! I'd like to book an appointment.\n\n` +
+      `Name: ${name}\nPhone: ${phone}\nDepartment: ${dept}\nDate: ${date}\n` +
+      `Time: ${document.getElementById('ftime').value || 'Flexible'}\n` +
+      `Patient Type: ${document.getElementById('ftype').value || 'N/A'}\n` +
+      `Concern: ${document.getElementById('fconcern').value || 'N/A'}`
+    );
+
+    window.open(`https://wa.me/919364013300?text=${msg}`, '_blank');
+    document.getElementById('overlay').classList.add('show');
+  }
+</script>
+</body>
+</html>
